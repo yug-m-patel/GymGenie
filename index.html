@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="logo.jpg" type="image/x-icon">
+    <title>GymGenie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: "Exo 2", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url('background.jpg');
+            background-size: cover;
+            /* Ensure the background image covers the entire viewport */
+            color: #333;
+            /* Adjust font color to ensure readability */
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            /* Semi-transparent background to maintain contrast */
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        header img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            /* Align items to the right */
+            background: #444;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            position: relative;
+            /* Position relative for absolute positioning */
+        }
+
+        .toggle-menu {
+            display: none;
+            /* Hide toggle button by default for larger screens */
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            /* Transition for smooth animation */
+        }
+
+        .menu-list a {
+            color: #fff;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        .menu-list a:hover {
+            background: #555;
+        }
+
+        @media screen and (max-width: 768px) {
+            .toggle-menu {
+                display: block;
+                /* Show toggle button for smaller screens */
+            }
+
+            .menu-list {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                background: #444;
+                width: 100vw;
+                text-align: center;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+                /* Transition for smooth animation */
+            }
+
+            .menu-list.active {
+                max-height: 200px;
+                /* Adjust max-height to fit your menu content */
+            }
+
+            .menu-list a {
+                display: block;
+                padding: 10px 0;
+            }
+
+            .menu-list a:hover {
+                background: #555;
+            }
+        }
+
+
+        nav a {
+            color: #fff;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: #555;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .workout {
+            color: white;
+            display: none;
+            background: #5e5e5ec5;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer {
+            font-size: 2em;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .exercise {
+            text-align: center;
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            background: #333333c5;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .contact-form {
+            color: white;
+            background: #414141d4;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: transparent;
+            color: white;
+        }
+
+        .contact-form button {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .contact-form button:hover {
+            background: #555;
+        }
+
+        .start-button {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .start-button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="logo.jpg" alt="logo">
+        <h1>GymGenie</h1>
+    </header>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="toggle-menu" onclick="toggleMenu()">&#9776;</a>
+            <div class="menu-list">
+                <a href="#" onclick="showWorkout('monday')">Monday</a>
+                <a href="#" onclick="showWorkout('tuesday')">Tuesday</a>
+                <a href="#" onclick="showWorkout('wednesday')">Wednesday</a>
+                <a href="#" onclick="showWorkout('thursday')">Thursday</a>
+                <a href="#" onclick="showWorkout('friday')">Friday</a>
+                <a href="#" onclick="showWorkout('saturday')">Saturday</a>
+                <a href="#" onclick="showWorkout('sunday')">Sunday</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="workout" id="monday">
+            <h2>Monday: Chest + Cardio</h2>
+            <button class="start-button" onclick="startWorkout('monday')">Start Workout</button>
+            <div id="monday-workout" class="hidden">
+                <div class="timer" id="monday-timer">00:00</div>
+                <div class="exercise" id="monday-exercise">Get Ready!</div>
+                <h3>Cardio (20 minutes)</h3>
+                <ul>
+                    <li>Interval running: Alternate 1 minute of jogging with 1 minute of brisk walking. Repeat for 20
+                        minutes.</li>
+                </ul>
+                <h3>Strength Training (40 minutes)</h3>
+                <ul>
+                    <li>Push-ups: 3 sets of 10-12 reps</li>
+                    <li>Dumbbell bench press: 3 sets of 10 reps</li>
+                    <li>Incline dumbbell press: 3 sets of 10 reps</li>
+                    <li>Chest flies: 3 sets of 12 reps</li>
+                    <li>Cable crossovers (if available): 3 sets of 12 reps</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Add similar structure for other days -->
+        <!-- Example for Tuesday -->
+        <div class="workout" id="tuesday">
+            <h2>Tuesday: Back + Cardio</h2>
+            <button class="start-button" onclick="startWorkout('tuesday')">Start Workout</button>
+            <div id="tuesday-workout" class="hidden">
+                <div class="timer" id="tuesday-timer">00:00</div>
+                <div class="exercise" id="tuesday-exercise">Get Ready!</div>
+                <h3>Cardio (20 minutes)</h3>
+                <ul>
+                    <li>Rowing machine: 20 minutes at moderate intensity.</li>
+                </ul>
+                <h3>Strength Training (40 minutes)</h3>
+                <ul>
+                    <li>Pull-ups (assisted if needed): 3 sets of 5-8 reps</li>
+                    <li>Dumbbell rows: 3 sets of 10 reps per arm</li>
+                    <li>Lat pull-downs: 3 sets of 10 reps</li>
+                    <li>Seated cable rows: 3 sets of 12 reps</li>
+                    <li>Back extensions: 3 sets of 15 reps</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Continue with similar structure for other days -->
+        <div class="contact-form">
+            <h2>Contact Us</h2>
+            <form action="mailto:your-email@example.com" method="post" enctype="text/plain">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Interactive Fitness Plan Guide. All rights reserved.</p>
+    </footer>
+    <script>
+        const workoutPlans = {
+            monday: {
+                cardio: [
+                    { name: "Jogging", duration: 60 },
+                    { name: "Brisk Walking", duration: 60 }
+                ],
+                strength: [
+                    { name: "Push-ups", duration: 120 },
+                    { name: "Dumbbell bench press", duration: 120 },
+                    { name: "Incline dumbbell press", duration: 120 },
+                    { name: "Chest flies", duration: 120 },
+                    { name: "Cable crossovers", duration: 120 }
+                ]
+            },
+            // Add other days' plans
+            tuesday: {
+                cardio: [
+                    { name: "Rowing", duration: 1200 }
+                ],
+                strength: [
+                    { name: "Pull-ups", duration: 120 },
+                    { name: "Dumbbell rows", duration: 120 },
+                    { name: "Lat pull-downs", duration: 120 },
+                    { name: "Seated cable rows", duration: 120 },
+                    { name: "Back extensions", duration: 120 }
+                ]
+            }
+        };
+
+        function showWorkout(day) {
+            var workouts = document.querySelectorAll('.workout');
+            workouts.forEach(function (workout) {
+                workout.style.display = 'none';
+            });
+            document.getElementById(day).style.display = 'block';
+        }
+
+        function startWorkout(day) {
+            var workoutDetails = document.getElementById(day + '-workout');
+            workoutDetails.style.display = 'block';
+            var timerElement = document.getElementById(day + '-timer');
+            var exerciseElement = document.getElementById(day + '-exercise');
+            startWorkoutRoutine(workoutPlans[day], timerElement, exerciseElement);
+        }
+
+        function startWorkoutRoutine(plan, timerElement, exerciseElement) {
+            let totalExercises = plan.cardio.concat(plan.strength);
+            let currentExercise = 0;
+            let timer;
+
+            function startTimer(duration, display, callback) {
+                let timer = duration, minutes, seconds;
+                display.textContent = formatTime(timer);
+                let interval = setInterval(() => {
+                    minutes = parseInt(timer / 60, 10);
+                    seconds = parseInt(timer % 60, 10);
+                    display.textContent = formatTime(timer);
+
+                    if (--timer < 0) {
+                        clearInterval(interval);
+                        callback();
+                    }
+                }, 1000);
+            }
+
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            function nextExercise() {
+                if (currentExercise < totalExercises.length) {
+                    let exercise = totalExercises[currentExercise];
+                    exerciseElement.textContent = exercise.name;
+                    startTimer(exercise.duration, timerElement, () => {
+                        currentExercise++;
+                        nextExercise();
+                    });
+                } else {
+                    exerciseElement.textContent = "Well done! Workout complete!";
+                    timerElement.textContent = "";
+                }
+            }
+
+            nextExercise();
+        }
+
+        function toggleMenu() {
+            const menuList = document.querySelector('.menu-list');
+            menuList.classList.toggle('active'); // Toggle 'active' class on menu-list
+        }
+
+        // Function to close menu on clicking outside (optional)
+        document.addEventListener('click', function (event) {
+            const menuList = document.querySelector('.menu-list');
+            if (!event.target.closest('.nav-container')) {
+                menuList.classList.remove('active'); // Close menu if clicked outside nav-container
+            }
+        });
+    </script>
+</body>
+
+</html>
